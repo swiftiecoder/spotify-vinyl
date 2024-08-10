@@ -104,14 +104,14 @@ export default function Shelf() {
   const handleDownload = async () => {
     const element = document.querySelector(".vinyls");
   
-    // const images = Array.from(element.querySelectorAll('img'));
-    // await Promise.all(images.map(img => new Promise(resolve => {
-    //   if (img.complete) {
-    //     resolve();
-    //   } else {
-    //     img.addEventListener('load', resolve);
-    //   }
-    // })));
+    const images = Array.from(element.querySelectorAll('img'));
+    await Promise.all(images.map(img => new Promise(resolve => {
+      if (img.complete) {
+        resolve();
+      } else {
+        img.addEventListener('load', resolve);
+      }
+    })));
   
     const canvas = await html2canvas(element, { useCORS: true });
   
