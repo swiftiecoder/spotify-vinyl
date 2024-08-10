@@ -15,3 +15,7 @@ It also allows you to download an image of your vinyl wall.
 Please note that I have not yet tested it on multiple displays so there's a chance it might look wonky. 
 
 Happy brat summer!
+
+## Future Directions
+- [ ] Flip-through Vinyl Shelf
+- [ ] Add paginated support
