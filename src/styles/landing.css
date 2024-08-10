@@ -1,0 +1,119 @@
+.main-container {
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.title {
+    background: linear-gradient(45deg, 
+        #5B51D8, 
+        #9c1e8f,
+        #902563, 
+        #c41960, 
+        #FD1D1D, 
+        #E1306C);
+    background-size: 600% 600%; 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    padding: 10px;
+    font-size: 15vh;
+    animation: gradientAnimation 10s ease infinite; 
+}
+
+
+.login-button 
+{
+    background-color: #1db954; 
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+    font-family: "Circular Std", system, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    height: 54px;
+    letter-spacing: 2px;
+    margin-bottom: 70px;
+    margin-left: 0px;
+    margin-right: 0px;
+    min-width: 160px;
+    padding-bottom: 17px;
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-top: 17px;
+    text-align: center;
+    text-decoration-color: rgb(255, 255, 255);
+    text-decoration-line: none;
+    text-decoration-style: solid;
+    text-decoration-thickness: auto;
+    text-transform: uppercase;
+    transition-behavior: normal;
+    transition-delay: 0s;
+    transition-duration: 0.25s;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.3, 0, 0.4, 1);
+    width: 320px;
+    -webkit-font-smoothing: antialiased;
+}
+.login-button:not(:hover) {
+    animation: bloom-in 0.5s ease-out forwards;
+}
+.login-button:hover {
+    animation: bloom-out 0.5s ease-out forwards;
+}
+
+.login-button:focus,
+.login-button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}   
+
+@keyframes bloom-out {
+    from {
+        --spread: 0px;
+        box-shadow: none;
+    }
+    to {
+        --spread: 75px;
+        box-shadow: -10px -10px var(--spread) 0px #5B51D8, 
+                    0 -10px var(--spread) 0px #cba3e5, 
+                    -10px 10px var(--spread) 0px #9c1e8f,
+                    0 10px var(--spread) 0px #902563, 
+                    10px 10px var(--spread) 0px #c41960,
+                    10px -10px var(--spread) 0px #FD1D1D, 
+                    10px 0 var(--spread) 0px #E1306C;
+    }
+}
+
+@keyframes bloom-in {
+    from {
+        --spread: 75px;
+        box-shadow: -10px -10px var(--spread) 0px #5B51D8, 
+                    0 -10px var(--spread) 0px #cba3e5, 
+                    -10px 10px var(--spread) 0px #9c1e8f,
+                    0 10px var(--spread) 0px #902563, 
+                    10px 10px var(--spread) 0px #c41960,
+                    10px -10px var(--spread) 0px #FD1D1D, 
+                    10px 0 var(--spread) 0px #E1306C;
+    }
+    to {
+        --spread: 0px;
+        box-shadow: none;
+    }
+}
