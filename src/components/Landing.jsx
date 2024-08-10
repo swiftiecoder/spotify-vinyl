@@ -4,8 +4,8 @@ import axios from "axios";
 import "../styles/landing.css";
 
 export default function Landing() {
-  const CLIENT_ID = "cc17510840b444f0b24efecc55e00c67";
-  const REDIRECT_URI = "http://localhost:5173";
+  const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
+  const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
   const RESPONSE_TYPE = "token";
   const SCOPES = "user-top-read user-read-recently-played user-read-email";
