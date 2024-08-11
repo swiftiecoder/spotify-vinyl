@@ -20,7 +20,7 @@ body
     margin-top: 40px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 60px;
 }
 
 .vinyls > div {
@@ -61,6 +61,7 @@ body
 .album-art {
     width: 100%;
     height: auto;
+    max-width: 100%;
     object-fit: cover;
     /* border-radius: 25px; */
     display: block;
@@ -167,6 +168,8 @@ p {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     top: 15px;
+    /* overflow-x: auto; 
+    overflow-y: hidden;  */
 }
 
 .custom-tabs .MuiTabs-root {

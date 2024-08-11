@@ -20,12 +20,27 @@ export default function Landing() {
   useEffect(() => {
     const hash = window.location.hash;
     let token = window.localStorage.getItem("token");
+    let expires = window.localStorage.getItem("expires");
 
     if (!token && hash) {
-      token = hash.split("&")[0].split("=")[1];
-      window.localStorage.setItem("token", token);
+      const params = new URLSearchParams(hash.replace("#", ""));
+      token = params.get("access_token");
+      const expiresIn = parseInt(params.get("expires_in"), 10);
+
+      if (token && expiresIn) {
+        const expirationTimestamp = Date.now() + expiresIn * 1000; // Convert seconds to milliseconds
+        window.localStorage.setItem("token", token);
+        window.localStorage.setItem("expires", expirationTimestamp.toString());
+      }
     }
     setToken(token);
+
+    const currentTimestamp = Date.now();
+    if (token && expires && currentTimestamp > parseInt(expires, 10)) {
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("expires");
+      setToken(null);
+    }
 
     if (token) {
       navigate("/wall");

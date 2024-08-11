@@ -22,9 +22,13 @@ export default function Shelf() {
 
   useEffect(() => {
     const token1 = window.localStorage.getItem("token");
-    if (!token1) {
+    const expires = window.localStorage.getItem("expires");
+    if (!token1 || Date.now() > expires) {
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("expires");
       navigate("/");
     }
+
     getUsername(token1);
     getRecentlyPlayed(token1);
     setToken(token1);
@@ -63,18 +67,18 @@ export default function Shelf() {
   };
 
   const getUsername = async (token1) => {
-    const data = await axios.get(
-      "https://api.spotify.com/v1/me/",
-      {
+    const data = await axios
+      .get("https://api.spotify.com/v1/me/", {
         headers: {
           Authorization: `Bearer ${token1}`,
-        }
-      }
-    ).then((response) => {setUsername(response.data.display_name)})
-    .catch((error) => 
-      {
+        },
+      })
+      .then((response) => {
+        setUsername(response.data.display_name);
+      })
+      .catch((error) => {
         console.log(error);
-        setUsername(null)
+        setUsername(null);
       });
   };
 
@@ -103,46 +107,53 @@ export default function Shelf() {
 
   const handleDownload = async () => {
     const element = document.querySelector(".vinyls");
-  
-    const images = Array.from(element.querySelectorAll('img'));
-    await Promise.all(images.map(img => new Promise(resolve => {
-      if (img.complete) {
-        resolve();
-      } else {
-        img.addEventListener('load', resolve);
-      }
-    })));
-  
+
+    const images = Array.from(element.querySelectorAll("img"));
+    await Promise.all(
+      images.map(
+        (img) =>
+          new Promise((resolve) => {
+            if (img.complete) {
+              resolve();
+            } else {
+              img.addEventListener("load", resolve);
+            }
+          })
+      )
+    );
+
     const canvas = await html2canvas(element, { useCORS: true });
-  
-    const padding = 30;
-    const finalCanvas = document.createElement('canvas');
-    finalCanvas.width = canvas.width;
+
+    const padding = 50;
+    const finalCanvas = document.createElement("canvas");
+    finalCanvas.width = canvas.width + padding * 2;
     finalCanvas.height = canvas.height + padding * 5;
-  
-    const ctx = finalCanvas.getContext('2d');
-  
-    ctx.fillStyle = 'white';
+
+    const ctx = finalCanvas.getContext("2d");
+
+    ctx.fillStyle = "white";
     ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-  
-    ctx.drawImage(canvas, 0, padding);
-  
-    const headerText = username ? `${username}'s Vinyl Wall` : 'Your Vinyl Wall';
-    ctx.font = '70px Roboto';
-    ctx.fillStyle = 'black';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-  
-    const textY = finalCanvas.height - padding*2 ;
-  
+
+    ctx.drawImage(canvas, padding, padding);
+
+    const headerText = username
+      ? `${username}'s Vinyl Wall`
+      : "Your Vinyl Wall";
+    ctx.font = "70px Roboto";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    const textY = finalCanvas.height - padding * 2;
+
     ctx.fillText(headerText, finalCanvas.width / 2, textY);
-  
-    const link = document.createElement('a');
-    link.href = finalCanvas.toDataURL('image/png');
-    link.download = 'items-snapshot.png';
+
+    const link = document.createElement("a");
+    link.href = finalCanvas.toDataURL("image/png");
+    link.download = "items-snapshot.png";
     link.click();
   };
-  
+
   return (
     <div>
       {token ? (
@@ -175,76 +186,72 @@ export default function Shelf() {
 
       {topItems === null && recentItems === null ? <Loader /> : null}
 
-      {token && (topItems || recentItems) ? (
-        <div className="vinyls-container">
-          {topItems ? (
-            <div className="vinyls">
-              {topItems.map((item, index) => (
-                <div key={index}>
-                  <div className="album-art-container">
-                    <a
-                      href={item.external_urls.spotify}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        className="album-art"
-                        src={item.album.images[0].url}
-                        alt={item.name}
-                      />
-                      <img
-                        className="album-art-wrapper"
-                        src={getRandomWrapper()}
-                        alt="Wrapper"
-                      />
-                      <img
-                        className="album-art-wrapper"
-                        src={clamp}
-                        alt="Wrapper"
-                      />
-                    </a>
-                  </div>
-                  <h3>{item.name}</h3>
-                  <p>{item.artists[0].name}</p>
+      {token && topItems ? (
+          <div className="vinyls">
+            {topItems.map((item, index) => (
+              <div key={index}>
+                <div className="album-art-container">
+                  <a
+                    href={item.external_urls.spotify}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      className="album-art"
+                      src={item.album.images[0].url}
+                      alt={item.name}
+                    />
+                    <img
+                      className="album-art-wrapper"
+                      src={getRandomWrapper()}
+                      alt="Wrapper"
+                    />
+                    <img
+                      className="album-art-wrapper"
+                      src={clamp}
+                      alt="Wrapper"
+                    />
+                  </a>
                 </div>
-              ))}
-            </div>
-          ) : null}
+                <h3>{item.name}</h3>
+                <p>{item.artists[0].name}</p>
+              </div>
+            ))}
+          </div>
+      ) : null}
 
-          {recentItems ? (
-            <div className="vinyls">
-              {recentItems.map((item, index) => (
-                <div key={index}>
-                  <div className="album-art-container">
-                    <a
-                      href={item.track.external_urls.spotify}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        className="album-art"
-                        src={item.track.album.images[0].url}
-                        alt={item.track.name}
-                      />
-                      <img
-                        className="album-art-wrapper"
-                        src={getRandomWrapper()}
-                        alt="Wrapper"
-                      />
-                      <img
-                        className="album-art-wrapper"
-                        src={clamp}
-                        alt="Wrapper"
-                      />
-                    </a>
-                  </div>
-                  <h3>{item.track.name}</h3>
-                  <p>{item.track.artists[0].name}</p>
+      {token && recentItems ? (
+          <div className="vinyls">
+            {recentItems.map((item, index) => (
+              <div key={index}>
+                <div className="album-art-container">
+                  <a
+                    href={item.track.external_urls.spotify}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      className="album-art"
+                      src={item.track.album.images[0].url}
+                      alt={item.track.name}
+                    />
+                    <img
+                      className="album-art-wrapper"
+                      src={getRandomWrapper()}
+                      alt="Wrapper"
+                    />
+                    <img
+                      className="album-art-wrapper"
+                      src={clamp}
+                      alt="Wrapper"
+                    />
+                  </a>
                 </div>
-              ))}
-            </div>
-          ) : null}
-        </div>
+                <h3>{item.track.name}</h3>
+                <p>{item.track.artists[0].name}</p>
+              </div>
+            ))}
+          </div>
       ) : null}
 
       <p className="footer">
