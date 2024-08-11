@@ -28,7 +28,7 @@ export default function Landing() {
       const expiresIn = parseInt(params.get("expires_in"), 10);
 
       if (token && expiresIn) {
-        const expirationTimestamp = Date.now() + expiresIn * 1000; // Convert seconds to milliseconds
+        const expirationTimestamp = Date.now() + expiresIn * 1000;
         window.localStorage.setItem("token", token);
         window.localStorage.setItem("expires", expirationTimestamp.toString());
       }
