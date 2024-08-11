@@ -85,6 +85,7 @@ export default function Shelf() {
   const handleLogOut = () => {
     setToken(null);
     window.localStorage.removeItem("token");
+    window.localStorage.removeItem("expires");
     navigate("/");
   };
 
