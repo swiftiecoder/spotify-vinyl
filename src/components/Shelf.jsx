@@ -34,6 +34,15 @@ export default function Shelf() {
     setToken(token1);
   }, []);
 
+  useEffect(() => {
+    const expires = window.localStorage.getItem("expires");
+    if (Date.now() > expires) {
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("expires");
+      navigate("/");
+    }
+  }, [topItems, recentItems]);
+
   const navigate = useNavigate();
 
   const getTopItems = async (term) => {
