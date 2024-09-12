@@ -19,3 +19,4 @@ Happy brat summer!
 ## Future Directions
 - [ ] Flip-through Vinyl Shelf
 - [ ] Add paginated support
+- [ ] Three.js wall
